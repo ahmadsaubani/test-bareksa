@@ -2,13 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Models\Tag;
+use App\Models\Topic;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 
-/**
- * Class TagsRepository.
- */
-class TagsRepository extends BaseRepository
+class TopicRepository extends BaseRepository
 {
     /**
      * @return string
@@ -16,19 +13,19 @@ class TagsRepository extends BaseRepository
      */
     public function model(): string
     {
-        return Tag::class;
+        return Topic::class;
     }
 
 
     /**
-     * @param $uuidTag
+     * @param $uuidTopic
      *
      * @return mixed
      * @throws \Exception
      */
-    public function getTagByUuid($uuidTag)
+    public function getTopicByUuid($uuidTopic)
     {
-        $data = $this->model->where("uuid", $uuidTag)->first();
+        $data = $this->model->where("uuid", $uuidTopic)->first();
 
         if (! $data) {
             throw new \Exception("data tidak ditemukan", 403);

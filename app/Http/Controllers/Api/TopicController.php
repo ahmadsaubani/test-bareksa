@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\CreateTagRequest;
-use App\Repositories\TagsRepository;
+use App\Http\Requests\CreateOrUpdateTopicRequest;
+use App\Repositories\TopicRepository;
+use App\Transformers\TopicTransformer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Transformers\TagTransformer;
 use Illuminate\Support\Str;
 
-class TagController extends Controller
+class TopicController extends Controller
 {
     /**
-     * @var TagsRepository
+     * @var TopicRepository
      */
-    protected $tagRepository;
+    protected $topicRepository;
 
     /**
-     * @param TagsRepository $tagRepository
+     * @param TopicRepository $topicRepository
      */
-    public function __construct(TagsRepository $tagRepository) {
-        $this->tagRepository = $tagRepository;
+    public function __construct(TopicRepository $topicRepository) {
+        $this->topicRepository = $topicRepository;
     }
 
     /**
@@ -29,18 +29,18 @@ class TagController extends Controller
      *
      * @return JsonResponse
      */
-    public function getAllTags(Request $request): JsonResponse
+    public function getAllTopics(Request $request): JsonResponse
     {
-        $result = $this->collection($this->tagRepository->get() , new TagTransformer());
+        $result = $this->collection($this->topicRepository->get() , new TopicTransformer());
 
         return $this->showResultV2('Data Found', $result, 200);
     }
 
     /**
-     * @param CreateTagRequest $request
+     * @param CreateOrUpdateTopicRequest $request
      * @return JsonResponse
      */
-    public function createTag(CreateTagRequest $request): JsonResponse
+    public function createTopic(CreateOrUpdateTopicRequest $request): JsonResponse
     {
         $request->validated();
 
@@ -48,7 +48,7 @@ class TagController extends Controller
         $data["title"]  = $request->title;
         $data["slug"]   = Str::slug($request->title);
 
-        $result = $this->item($this->tagRepository->create($data) , new TagTransformer());
+        $result = $this->item($this->topicRepository->create($data) , new TopicTransformer());
 
         return $this->showResultV2('Data Created', $result, 201);
     }
@@ -56,7 +56,7 @@ class TagController extends Controller
     /**
      * @throws \Exception
      */
-    public function updateTagByUuid(CreateTagRequest $request, $uuidTag): JsonResponse
+    public function updateTopicByUuid(CreateOrUpdateTopicRequest $request, $uuidTopic): JsonResponse
     {
         $request->validated();
 
@@ -65,9 +65,9 @@ class TagController extends Controller
         $data["slug"]  = Str::slug($request->title);
 
         try {
-            $tag = $this->tagRepository->getTagByUuid($uuidTag);
+            $topic = $this->topicRepository->getTopicByUuid($uuidTopic);
 
-            $result = $this->item($this->tagRepository->updateById($tag->id, $data) , new TagTransformer());
+            $result = $this->item($this->topicRepository->updateById($topic->id, $data) , new TopicTransformer());
 
             return $this->showResultV2('Data updated', $result, 200);
         } catch (\Exception $exception) {
@@ -76,16 +76,16 @@ class TagController extends Controller
     }
 
     /**
-     * @param $uuidTag
+     * @param $uuidTopic
      *
      * @return JsonResponse
      */
-    public function deleteTagByUuid($uuidTag): JsonResponse
+    public function deleteTopicByUuid($uuidTopic): JsonResponse
     {
         try {
-            $tag = $this->tagRepository->getTagByUuid($uuidTag);
+            $topic = $this->topicRepository->getTopicByUuid($uuidTopic);
 
-            $this->tagRepository->deleteById($tag->id);
+            $this->topicRepository->deleteById($topic->id);
 
             return $this->showResult('Data deleted', [], 200);
         } catch (\Exception $exception) {

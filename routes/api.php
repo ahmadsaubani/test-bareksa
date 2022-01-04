@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\TagController;
+use App\Http\Controllers\Api\TopicController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,16 +19,16 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/v1')->group(function () {
 
     Route::prefix('/tags')->group(function () {
+        Route::get('/populate', [TagController::class, 'getAllTags']);
         Route::post('/create', [TagController::class, 'createTag']);
+        Route::post('/update/{uuidTag}', [TagController::class, 'updateTagByUuid']);
+        Route::delete('/delete/{uuidTag}', [TagController::class, 'deleteTagByUuid']);
     });
 
-//    Route::prefix('/billing-address')->group(function () {
-//        Route::get('/populate', [BillingAddressController::class, 'populate']);
-//    });
-//    Route::prefix('/invoice')->group(function () {
-//        Route::get('/populate', [InvoiceController::class, 'populate']);
-//        Route::post('/create', [InvoiceController::class, 'create']);
-//        Route::post('/edit/{uuid}', [InvoiceController::class, 'edit']);
-//        Route::delete('/delete/{uuid}', [InvoiceController::class, 'delete']);
-
+    Route::prefix('/topic')->group(function () {
+        Route::get('/populate', [TopicController::class, 'getAllTopics']);
+        Route::post('/create', [TopicController::class, 'createTopic']);
+        Route::post('/update/{uuidTag}', [TopicController::class, 'updateTopicByUuid']);
+        Route::delete('/delete/{uuidTag}', [TopicController::class, 'deleteTopicByUuid']);
+    });
 });
