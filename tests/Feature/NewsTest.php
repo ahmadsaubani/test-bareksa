@@ -104,7 +104,7 @@ class NewsTest extends TestCase
         $news     = $newsRepo->getNewsBySlug("generasi-sandwich-kamu-membiayai-biaya-hidup-atau-gaya-hidup");
 
         $response = $this->json('POST', '/api/v1/news/publish/' . $news->uuid);
-        
+
         $response->assertStatus(200);
 
     }
