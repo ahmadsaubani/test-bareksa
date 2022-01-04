@@ -52,6 +52,7 @@ class NewsController extends Controller
      * @param CreateNewsRequest $request
      *
      * @return JsonResponse
+     * @throws \Throwable
      */
     public function create(CreateNewsRequest $request): JsonResponse
     {
@@ -80,6 +81,7 @@ class NewsController extends Controller
      * @param $uuidNews
      *
      * @return JsonResponse
+     * @throws \Throwable
      */
     public function updateNewsByUuid(UpdateNewsRequest $request, $uuidNews): JsonResponse
     {
@@ -113,9 +115,28 @@ class NewsController extends Controller
     public function deleteNewsByUuid($uuidNews): JsonResponse
     {
         try {
-            $this->newsRepository->updateStatusNewsToDeleted($uuidNews);
+            $news = $this->newsRepository->getNewsByUuid($uuidNews);
+            $this->newsRepository->deleteNews($news);
 
             return $this->showResult('Data deleted', [], 200);
+        } catch (\Exception $exception) {
+            return $this->realErrorResponse($exception);
+        }
+    }
+
+    /**
+     * @param $uuidNews
+     *
+     * @return JsonResponse
+     */
+    public function publishNewsByUuid($uuidNews): JsonResponse
+    {
+        try {
+            $news = $this->newsRepository->publishNews($uuidNews);
+
+            $result = $this->item($news, new NewsTransformer(), 'topic,tags');
+
+            return $this->showResultV2('Data Found', $result, 200);
         } catch (\Exception $exception) {
             return $this->realErrorResponse($exception);
         }

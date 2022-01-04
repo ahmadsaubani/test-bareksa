@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\News;
 use App\Models\NewsReference;
+use Illuminate\Support\Str;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 use Nyholm\Psr7\Request;
 
@@ -42,6 +43,8 @@ class NewsRepository extends BaseRepository
      */
     public function savingNews(array $data)
     {
+        $data["slug"] = Str::slug($data["title"]);
+
         return News::updateOrCreate(
             [
                 "slug"          => $data["slug"],
@@ -54,6 +57,20 @@ class NewsRepository extends BaseRepository
                 "description"   => $data["description"]
             ]
         );
+    }
+
+    public function updatingNews(News $news, array $data)
+    {
+        $data["slug"] = Str::slug($data["title"]);
+        $news->update([
+            "title"         => $data["title"],
+            "slug"          => $data["slug"],
+            "topic_id"      => $data["topic_id"],
+            "description"   => $data["description"]
+
+        ]);
+
+        return $news;
     }
 
     /**
@@ -113,7 +130,7 @@ class NewsRepository extends BaseRepository
             $data["topic_id"]   = $news->topic_id;
         }
 
-        $updating = $this->savingNews($data);
+        $updating = $this->updatingNews($news, $data);
 
         if (array_key_exists("tag_id", $data) && $data["tag_id"] != null) {
             $addTagReferences   = new NewsReferenceRepository();
@@ -184,7 +201,7 @@ class NewsRepository extends BaseRepository
                     $news->where("status", 2);
                     break;
                 case @$param["status"] == News::STATUS_DELETED;
-                    $news->where("status", 3);
+                    $news->onlyTrashed();
                     break;
             }
         } else {
@@ -228,7 +245,7 @@ class NewsRepository extends BaseRepository
      * @return mixed
      * @throws \Exception
      */
-    public function updateStatusNewsToDeleted($uuidNews)
+    public function publishNews($uuidNews)
     {
         $data = $this->model->where("uuid", $uuidNews)->first();
 
@@ -236,9 +253,20 @@ class NewsRepository extends BaseRepository
             throw new \Exception("data tidak ditemukan", 403);
         }
 
-        $data->status = 3;
+        $data->status = 2;
         $data->save();
 
         return $data;
+    }
+
+    /**
+     * @param string $newsSlug
+     *
+     * @return mixed
+     */
+    public function getNewsBySlug(string $newsSlug)
+    {
+        return $this->model->where("slug", "LIKE", "%" . $newsSlug ."%")
+            ->first();
     }
 }

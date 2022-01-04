@@ -8,6 +8,7 @@ use App\Transformers\TopicTransformer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class TopicController extends Controller
@@ -39,6 +40,7 @@ class TopicController extends Controller
     /**
      * @param CreateOrUpdateTopicRequest $request
      * @return JsonResponse
+     * @throws \Throwable
      */
     public function createTopic(CreateOrUpdateTopicRequest $request): JsonResponse
     {
@@ -46,14 +48,24 @@ class TopicController extends Controller
 
         $input          = $request->only("title");
         $input["slug"]  = Str::slug($request->title);
+        try {
+            DB::beginTransaction();
+            $topic  = $this->topicRepository->create($input);
 
-        $result = $this->item($this->topicRepository->create($input) , new TopicTransformer());
+            $result = $this->item($topic, new TopicTransformer());
 
-        return $this->showResultV2('Data Created', $result, 201);
+            DB::commit();
+
+            return $this->showResultV2('Data Created', $result, 201);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return $this->realErrorResponse($exception);
+        }
     }
 
     /**
      * @throws \Exception
+     * @throws \Throwable
      */
     public function updateTopicByUuid(CreateOrUpdateTopicRequest $request, $uuidTopic): JsonResponse
     {
@@ -62,12 +74,17 @@ class TopicController extends Controller
         $input["slug"]  = Str::slug($request->title);
 
         try {
-            $topic = $this->topicRepository->getTopicByUuid($uuidTopic);
+            DB::beginTransaction();
 
-            $result = $this->item($this->topicRepository->updateById($topic->id, $input) , new TopicTransformer());
+            $topic          = $this->topicRepository->getTopicByUuid($uuidTopic);
+            $updateTopic    = $this->topicRepository->updateById($topic->id, $input);
 
+            $result = $this->item($updateTopic, new TopicTransformer());
+
+            DB::commit();
             return $this->showResultV2('Data updated', $result, 200);
         } catch (\Exception $exception) {
+            DB::rollBack();
             return $this->realErrorResponse($exception);
         }
     }
@@ -76,16 +93,20 @@ class TopicController extends Controller
      * @param $uuidTopic
      *
      * @return JsonResponse
+     * @throws \Throwable
      */
     public function deleteTopicByUuid($uuidTopic): JsonResponse
     {
         try {
+            DB::beginTransaction();
             $topic = $this->topicRepository->getTopicByUuid($uuidTopic);
 
             $this->topicRepository->deleteById($topic->id);
+            DB::commit();
 
             return $this->showResult('Data deleted', [], 200);
         } catch (\Exception $exception) {
+            DB::rollBack();
             return $this->realErrorResponse($exception);
         }
     }

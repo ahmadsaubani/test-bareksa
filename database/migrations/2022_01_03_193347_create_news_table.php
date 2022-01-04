@@ -24,6 +24,7 @@ class CreateNewsTable extends Migration
                 ->onDelete('cascade');
             $table->longText('description');
             $table->tinyInteger('status')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

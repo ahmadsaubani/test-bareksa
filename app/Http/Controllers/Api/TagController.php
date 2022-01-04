@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Transformers\TagTransformer;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class TagController extends Controller
@@ -39,6 +40,7 @@ class TagController extends Controller
     /**
      * @param CreateTagRequest $request
      * @return JsonResponse
+     * @throws \Throwable
      */
     public function createTag(CreateTagRequest $request): JsonResponse
     {
@@ -46,14 +48,25 @@ class TagController extends Controller
 
         $input          = $request->only("title");
         $input["slug"]  = Str::slug($request->title);
+        try {
+            DB::beginTransaction();
+            $tag    = $this->tagRepository->create($input);
 
-        $result = $this->item($this->tagRepository->create($input) , new TagTransformer());
+            $result = $this->item($tag, new TagTransformer());
+            DB::commit();
 
-        return $this->showResultV2('Data Created', $result, 201);
+            return $this->showResultV2('Data Created', $result, 201);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return $this->realErrorResponse($exception);
+        }
+
+
     }
 
     /**
      * @throws \Exception
+     * @throws \Throwable
      */
     public function updateTagByUuid(CreateTagRequest $request, $uuidTag): JsonResponse
     {
@@ -63,12 +76,16 @@ class TagController extends Controller
         $input["slug"]  = Str::slug($request->title);
 
         try {
-            $tag = $this->tagRepository->getTagByUuid($uuidTag);
+            DB::beginTransaction();
+            $tag        = $this->tagRepository->getTagByUuid($uuidTag);
+            $updateTag  = $this->tagRepository->updateById($tag->id, $input);
 
-            $result = $this->item($this->tagRepository->updateById($tag->id, $input) , new TagTransformer());
+            $result = $this->item($updateTag, new TagTransformer());
+            DB::commit();
 
             return $this->showResultV2('Data updated', $result, 200);
         } catch (\Exception $exception) {
+            DB::rollBack();
             return $this->realErrorResponse($exception);
         }
     }
@@ -77,16 +94,20 @@ class TagController extends Controller
      * @param $uuidTag
      *
      * @return JsonResponse
+     * @throws \Throwable
      */
     public function deleteTagByUuid($uuidTag): JsonResponse
     {
         try {
+            DB::beginTransaction();
             $tag = $this->tagRepository->getTagByUuid($uuidTag);
 
             $this->tagRepository->deleteById($tag->id);
+            DB::commit();
 
             return $this->showResult('Data deleted', [], 200);
         } catch (\Exception $exception) {
+            DB::rollBack();
             return $this->realErrorResponse($exception);
         }
     }

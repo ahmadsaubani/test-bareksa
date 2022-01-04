@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\CreateUuid;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property mixed $uuid
@@ -15,7 +16,7 @@ use App\Traits\CreateUuid;
  */
 class News extends Model
 {
-    use CreateUuid;
+    use CreateUuid, SoftDeletes;
 
     const STATUS_DRAFT      = "draft";
     const STATUS_PUBLISHED  = "publish";
