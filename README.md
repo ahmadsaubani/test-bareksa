@@ -28,7 +28,7 @@
 - download a collection postman in root project ``postman_colllection.json``
 
 ## Unit Test
-- to running unit test please copy this in ``./vendor/bin/phpunit``
+- to running unit test please copy this ``./vendor/bin/phpunit``
 
 ## Have fun!!
 
