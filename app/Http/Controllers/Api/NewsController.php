@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\CreateNewsRequest;
 use App\Http\Requests\UpdateNewsRequest;
 use App\Repositories\NewsRepository;
-use App\Repositories\TagsRepository;
-use App\Repositories\TopicRepository;
 use App\Transformers\NewsTransformer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -67,9 +65,10 @@ class NewsController extends Controller
             DB::beginTransaction();
 
             $news = $this->newsRepository->createNews($input);
-            DB::commit();
+            $result = $this->item($news, new NewsTransformer(), 'topic,tags');
 
-            return $this->showResult("Data saved", $news);
+            DB::commit();
+            return $this->showResultV2('Data Created', $result, 201);
         } catch (\Exception $exception) {
             DB::rollBack();
             return $this->realErrorResponse($exception);
@@ -96,12 +95,29 @@ class NewsController extends Controller
 
             $test = $this->newsRepository->updateNews($news, $input);
 
+            $result = $this->item($test, new NewsTransformer(), 'topic,tags');
+
             DB::commit();
-            return $this->showResult("Data updated", $test);
+            return $this->showResultV2('Data Found', $result, 200);
         } catch (\Exception $exception) {
             DB::rollBack();
             return $this->realErrorResponse($exception);
         }
+    }
 
+    /**
+     * @param $uuidNews
+     *
+     * @return JsonResponse
+     */
+    public function deleteNewsByUuid($uuidNews): JsonResponse
+    {
+        try {
+            $this->newsRepository->updateStatusNewsToDeleted($uuidNews);
+
+            return $this->showResult('Data deleted', [], 200);
+        } catch (\Exception $exception) {
+            return $this->realErrorResponse($exception);
+        }
     }
 }

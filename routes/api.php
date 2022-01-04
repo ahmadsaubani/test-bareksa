@@ -37,7 +37,7 @@ Route::prefix('/v1')->group(function () {
         Route::get('/populate', [NewsController::class, 'getAllNews']);
         Route::post('/create', [NewsController::class, 'create']);
         Route::post('/update/{uuidNews}', [NewsController::class, 'updateNewsByUuid']);
-//        Route::delete('/delete/{uuidTag}', [TopicController::class, 'deleteTopicByUuid']);
+        Route::delete('/delete/{uuidNews}', [NewsController::class, 'deleteNewsByUuid']);
     });
 
 

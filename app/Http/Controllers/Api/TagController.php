@@ -44,11 +44,10 @@ class TagController extends Controller
     {
         $request->validated();
 
-        $data           = [];
-        $data["title"]  = $request->title;
-        $data["slug"]   = Str::slug($request->title);
+        $input          = $request->only("title");
+        $input["slug"]  = Str::slug($request->title);
 
-        $result = $this->item($this->tagRepository->create($data) , new TagTransformer());
+        $result = $this->item($this->tagRepository->create($input) , new TagTransformer());
 
         return $this->showResultV2('Data Created', $result, 201);
     }
@@ -60,14 +59,13 @@ class TagController extends Controller
     {
         $request->validated();
 
-        $data          = [];
-        $data["title"] = $request->title;
-        $data["slug"]  = Str::slug($request->title);
+        $input          = $request->only("title");
+        $input["slug"]  = Str::slug($request->title);
 
         try {
             $tag = $this->tagRepository->getTagByUuid($uuidTag);
 
-            $result = $this->item($this->tagRepository->updateById($tag->id, $data) , new TagTransformer());
+            $result = $this->item($this->tagRepository->updateById($tag->id, $input) , new TagTransformer());
 
             return $this->showResultV2('Data updated', $result, 200);
         } catch (\Exception $exception) {

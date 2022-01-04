@@ -180,14 +180,15 @@ class NewsRepository extends BaseRepository
                 case @$param["status"] == News::STATUS_DRAFT:
                     $news->where("status", 1);
                     break;
-                case @$param["status"] == News::STATUS_DELETED;
+                case @$param["status"] == News::STATUS_PUBLISHED;
                     $news->where("status", 2);
                     break;
-                case @$param["status"] == News::STATUS_PUBLISHED;
+                case @$param["status"] == News::STATUS_DELETED;
                     $news->where("status", 3);
                     break;
             }
-
+        } else {
+            $news->whereIn("status", [1,2]);
         }
 
         if (array_key_exists("topic", $param) && @$param["topic"] != null) {
@@ -219,5 +220,25 @@ class NewsRepository extends BaseRepository
         }
 
         return $news;
+    }
+
+    /**
+     * @param $uuidNews
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function updateStatusNewsToDeleted($uuidNews)
+    {
+        $data = $this->model->where("uuid", $uuidNews)->first();
+
+        if (! $data) {
+            throw new \Exception("data tidak ditemukan", 403);
+        }
+
+        $data->status = 3;
+        $data->save();
+
+        return $data;
     }
 }

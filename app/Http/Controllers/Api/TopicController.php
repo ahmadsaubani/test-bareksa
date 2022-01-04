@@ -44,11 +44,10 @@ class TopicController extends Controller
     {
         $request->validated();
 
-        $data           = [];
-        $data["title"]  = $request->title;
-        $data["slug"]   = Str::slug($request->title);
+        $input          = $request->only("title");
+        $input["slug"]  = Str::slug($request->title);
 
-        $result = $this->item($this->topicRepository->create($data) , new TopicTransformer());
+        $result = $this->item($this->topicRepository->create($input) , new TopicTransformer());
 
         return $this->showResultV2('Data Created', $result, 201);
     }
@@ -59,15 +58,13 @@ class TopicController extends Controller
     public function updateTopicByUuid(CreateOrUpdateTopicRequest $request, $uuidTopic): JsonResponse
     {
         $request->validated();
-
-        $data          = [];
-        $data["title"] = $request->title;
-        $data["slug"]  = Str::slug($request->title);
+        $input          = $request->only("title");
+        $input["slug"]  = Str::slug($request->title);
 
         try {
             $topic = $this->topicRepository->getTopicByUuid($uuidTopic);
 
-            $result = $this->item($this->topicRepository->updateById($topic->id, $data) , new TopicTransformer());
+            $result = $this->item($this->topicRepository->updateById($topic->id, $input) , new TopicTransformer());
 
             return $this->showResultV2('Data updated', $result, 200);
         } catch (\Exception $exception) {

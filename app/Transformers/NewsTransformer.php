@@ -25,7 +25,8 @@ class NewsTransformer extends TransformerAbstract
             "id"                    => $model->uuid,
             "title"                 => $model->title,
             "slug"                  => $model->slug,
-            "description"           => $model->description
+            "description"           => $model->description,
+            "status"                => $this->maskStatusToString($model)
         ];
     }
 
@@ -55,6 +56,24 @@ class NewsTransformer extends TransformerAbstract
         if (!empty($tags)) {
             return $this->collection($tags, new TagTransformer(), "tags");
         }
+    }
+
+    /**
+     * @param $model
+     *
+     * @return string
+     */
+    private function maskStatusToString($model): string
+    {
+        if ($model->status == 1) {
+            $status = "draft";
+        } elseif ($model->status == 2) {
+            $status = "publish";
+        } else {
+            $status = "deleted";
+        }
+
+        return $status;
     }
 }
 
