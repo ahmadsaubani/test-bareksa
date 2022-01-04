@@ -1,6 +1,7 @@
 <?php
 
-use Database\Seeds\ItemsSeeder;
+use Database\Seeds\TagSeeder;
+use Database\Seeds\TopicSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +16,8 @@ class DatabaseSeeder extends Seeder
     {
         try {
             DB::beginTransaction();
-            $this->call(ItemsSeeder::class);
+            $this->call(TopicSeeder::class);
+            $this->call(TagSeeder::class);
 
             DB::commit();
         } catch (Exception $e) {
