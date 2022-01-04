@@ -6,6 +6,12 @@
         "framework",
         "laravel"
     ],
+    "authors": [
+        {
+            "name": "Ahmad Saubani",
+            "email": "banz.cozy@gmail.com"
+        }
+    ],
     "license": "MIT",
     "require": {
         "php": "^7.2.5|^8.0",
