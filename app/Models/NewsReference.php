@@ -5,17 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\CreateUuid;
 
-/**
- * @property mixed $uuid
- * @property mixed $title
- * @property mixed $slug
- */
-class Topic extends Model
+class NewsReference extends Model
 {
     use CreateUuid;
 
     protected $fillable = [
-        'slug',
-        'title'
+        'ref_id',
+        'ref_model',
+        'ref_class',
+        'tag_id'
     ];
 }

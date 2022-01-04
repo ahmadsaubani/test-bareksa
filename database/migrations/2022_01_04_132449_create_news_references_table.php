@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNewsTagsTable extends Migration
+class CreateNewsReferencesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateNewsTagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('news_tags', function (Blueprint $table) {
+        Schema::create('news_references', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->unique()->index();
-            $table->foreignId('news_id')
-                ->constrained()
-                ->onDelete('cascade');
-            $table->foreignId('tag_id')
-                ->constrained()
-                ->onDelete('cascade');
+            $table->bigInteger("ref_id")->index();
+            $table->string("ref_model")->index();
+            $table->string("ref_class")->index();
+            $table->string("tag_id")->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ class CreateNewsTagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('news_tags');
+        Schema::dropIfExists('news_references');
     }
 }

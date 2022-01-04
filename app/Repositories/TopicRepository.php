@@ -33,4 +33,16 @@ class TopicRepository extends BaseRepository
 
         return $data;
     }
+
+
+    /**
+     * @param string $topicSlug
+     *
+     * @return mixed
+     */
+    public function getTopicBySlug(string $topicSlug)
+    {
+        return $this->model->where("slug", "LIKE", "%" . $topicSlug ."%")
+            ->first();
+    }
 }

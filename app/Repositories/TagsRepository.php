@@ -19,7 +19,6 @@ class TagsRepository extends BaseRepository
         return Tag::class;
     }
 
-
     /**
      * @param $uuidTag
      *
@@ -36,4 +35,16 @@ class TagsRepository extends BaseRepository
 
         return $data;
     }
+
+    /**
+     * @param string $tagSlug
+     *
+     * @return mixed
+     */
+    public function getTagBySlug(string $tagSlug)
+    {
+        return $this->model->where("slug", "LIKE", "%" . $tagSlug ."%")
+            ->first();
+    }
 }
+

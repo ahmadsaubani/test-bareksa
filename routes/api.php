@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\TopicController;
+use App\Http\Controllers\Api\NewsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,4 +32,13 @@ Route::prefix('/v1')->group(function () {
         Route::post('/update/{uuidTag}', [TopicController::class, 'updateTopicByUuid']);
         Route::delete('/delete/{uuidTag}', [TopicController::class, 'deleteTopicByUuid']);
     });
+
+    Route::prefix('/news')->group(function () {
+        Route::get('/populate', [NewsController::class, 'getAllNews']);
+        Route::post('/create', [NewsController::class, 'create']);
+        Route::post('/update/{uuidNews}', [NewsController::class, 'updateNewsByUuid']);
+//        Route::delete('/delete/{uuidTag}', [TopicController::class, 'deleteTopicByUuid']);
+    });
+
+
 });
