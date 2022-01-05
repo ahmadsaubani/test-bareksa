@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Repositories\NewsRepository;
 use App\Repositories\TagsRepository;
 use App\Repositories\TopicRepository;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 
 class NewsTest extends TestCase
@@ -53,29 +53,33 @@ class NewsTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testCanGetAllTag()
+    public function testCanGetAllNews()
     {
         $response = $this->get('/api/v1/news/populate');
 
         $response->assertStatus(200);
     }
 
-    public function testCanGetAllTagWithParamStatusDraft()
+    public function testCanGetAllNewsWithParamStatusDraft()
     {
+        Redis::flushAll();
         $response = $this->get('/api/v1/news/populate?status=draft');
 
         $response->assertStatus(200);
+
     }
 
-    public function testCanGetAllTagWithParamTag()
+    public function testCanGetAllNewsWithParamTag()
     {
+        Redis::flushAll();
         $response = $this->get('/api/v1/news/populate?tag=bareksa-navigator');
 
         $response->assertStatus(200);
     }
 
-    public function testCanGetAllTagWithParamTopic()
+    public function testCanGetAllNewsWithParamTopic()
     {
+        Redis::flushAll();
         $response = $this->get('/api/v1/news/populate?topic=investasi');
 
         $response->assertStatus(200);
@@ -93,6 +97,7 @@ class NewsTest extends TestCase
 
     public function testCanGetAllTagWithParamStatusDeleted()
     {
+        Redis::flushAll();
         $response = $this->get('/api/v1/news/populate?status=deleted');
 
         $response->assertStatus(200);
@@ -111,6 +116,7 @@ class NewsTest extends TestCase
 
     public function testCanGetAllTagWithParamStatusPublish()
     {
+        Redis::flushAll();
         $response = $this->get('/api/v1/news/populate?status=publish');
 
         $response->assertStatus(200);

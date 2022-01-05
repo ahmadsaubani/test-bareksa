@@ -15,11 +15,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-
 Route::prefix('/v1')->group(function () {
 
     Route::prefix('/tags')->group(function () {
+        Route::get('/detail/{slug}', [TagController::class, 'showTagBySlug']);
         Route::get('/populate', [TagController::class, 'getAllTags']);
         Route::post('/create', [TagController::class, 'createTag']);
         Route::post('/update/{uuidTag}', [TagController::class, 'updateTagByUuid']);
@@ -27,6 +26,7 @@ Route::prefix('/v1')->group(function () {
     });
 
     Route::prefix('/topic')->group(function () {
+        Route::get('/detail/{slug}', [TopicController::class, 'showTopicBySlug']);
         Route::get('/populate', [TopicController::class, 'getAllTopics']);
         Route::post('/create', [TopicController::class, 'createTopic']);
         Route::post('/update/{uuidTag}', [TopicController::class, 'updateTopicByUuid']);
@@ -34,12 +34,11 @@ Route::prefix('/v1')->group(function () {
     });
 
     Route::prefix('/news')->group(function () {
+        Route::get('/detail/{slug}', [NewsController::class, 'showNewsBySlug']);
         Route::get('/populate', [NewsController::class, 'getAllNews']);
         Route::post('/create', [NewsController::class, 'create']);
         Route::post('/publish/{uuidNews}', [NewsController::class, 'publishNewsByUuid']);
         Route::post('/update/{uuidNews}', [NewsController::class, 'updateNewsByUuid']);
         Route::delete('/delete/{uuidNews}', [NewsController::class, 'deleteNewsByUuid']);
     });
-
-
 });

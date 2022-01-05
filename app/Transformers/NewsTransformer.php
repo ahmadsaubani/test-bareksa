@@ -65,11 +65,11 @@ class NewsTransformer extends TransformerAbstract
      */
     private function maskStatusToString($model): string
     {
-        if ($model->status == 1 && $model->deleted_at == null) {
+        if ($model->status == 1) {
             $status = "draft";
-        } elseif ($model->status == 2 && $model->deleted_at == null) {
+        } elseif ($model->status == 2) {
             $status = "publish";
-        } else {
+        } elseif ($model->status == 3) {
             $status = "deleted";
         }
 

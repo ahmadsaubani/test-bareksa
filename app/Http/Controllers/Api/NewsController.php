@@ -35,11 +35,9 @@ class NewsController extends Controller
     public function getAllNews(Request $request): JsonResponse
     {
         try {
-            $news  = $this->newsRepository->filter($request->all());
+            $news  = $this->newsRepository->getData($request->all());
 
-            $data  = $news->get();
-
-            $result = $this->collection($data, new NewsTransformer(), 'topic,tags');
+            $result = $this->collection($news, new NewsTransformer(), 'topic,tags');
 
             return $this->showResultV2('Data Found', $result, 200);
         } catch (\Exception $exception) {
@@ -133,6 +131,28 @@ class NewsController extends Controller
     {
         try {
             $news = $this->newsRepository->publishNews($uuidNews);
+
+            $result = $this->item($news, new NewsTransformer(), 'topic,tags');
+
+            return $this->showResultV2('Data Found', $result, 200);
+        } catch (\Exception $exception) {
+            return $this->realErrorResponse($exception);
+        }
+    }
+
+    /**
+     * @param $slug
+     *
+     * @return JsonResponse
+     */
+    public function showNewsBySlug($slug): JsonResponse
+    {
+        try {
+            $news = $this->newsRepository->getNewsBySlug($slug);
+
+            if (! $news) {
+                return $this->errorResponse("Data tidak ditemukan", 403);
+            }
 
             $result = $this->item($news, new NewsTransformer(), 'topic,tags');
 

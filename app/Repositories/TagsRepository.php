@@ -27,6 +27,7 @@ class TagsRepository extends BaseRepository
      */
     public function getTagByUuid($uuidTag)
     {
+        deleteCache("getAllTag");
         $data = $this->model->where("uuid", $uuidTag)->first();
 
         if (! $data) {
@@ -43,8 +44,42 @@ class TagsRepository extends BaseRepository
      */
     public function getTagBySlug(string $tagSlug)
     {
-        return $this->model->where("slug", "LIKE", "%" . $tagSlug ."%")
-            ->first();
+        $getCache = getCache($tagSlug);
+        if (! $getCache) {
+            $data = $this->model->where("slug", "LIKE", "%" . $tagSlug ."%")
+                ->first();
+            setCache($tagSlug, $data);
+        } else {
+            $temp=[];
+            $test= json_decode($getCache, false);
+            foreach ($test as $key => $value) {
+                $temp[0][$key] = $value;
+            }
+            $data = $this->model::hydrate($temp);
+            $data = $data[0];
+        }
+        return $data;
+    }
+
+    public function getData()
+    {
+        $key = "getAllTag";
+        $getCache = getCache($key);
+
+        if (! $getCache) {
+            $data = $this->model::get();
+            setCache($key, $data);
+        } else {
+            $data = $this->getFromCache($key);
+        }
+
+        return $data;
+
+    }
+
+    public function getFromCache(string $key)
+    {
+        return $this->model::hydrate(json_decode(getCache($key), false));
     }
 }
 

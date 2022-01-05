@@ -32,7 +32,8 @@ class TopicController extends Controller
      */
     public function getAllTopics(Request $request): JsonResponse
     {
-        $result = $this->collection($this->topicRepository->get() , new TopicTransformer());
+        $data  = $this->topicRepository->getData();
+        $result = $this->collection($data , new TopicTransformer());
 
         return $this->showResultV2('Data Found', $result, 200);
     }
@@ -107,6 +108,28 @@ class TopicController extends Controller
             return $this->showResult('Data deleted', [], 200);
         } catch (\Exception $exception) {
             DB::rollBack();
+            return $this->realErrorResponse($exception);
+        }
+    }
+
+    /**
+     * @param $slug
+     *
+     * @return JsonResponse
+     */
+    public function showTopicBySlug($slug): JsonResponse
+    {
+        try {
+            $news = $this->topicRepository->getTopicBySlug($slug);
+
+            if (! $news) {
+                return $this->errorResponse("Data tidak ditemukan", 403);
+            }
+
+            $result = $this->item($news, new TopicTransformer(), 'topic,tags');
+
+            return $this->showResultV2('Data Found', $result, 200);
+        } catch (\Exception $exception) {
             return $this->realErrorResponse($exception);
         }
     }

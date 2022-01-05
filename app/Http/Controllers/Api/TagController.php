@@ -32,7 +32,8 @@ class TagController extends Controller
      */
     public function getAllTags(Request $request): JsonResponse
     {
-        $result = $this->collection($this->tagRepository->get() , new TagTransformer());
+        $data  = $this->tagRepository->getData();
+        $result = $this->collection($data , new TagTransformer());
 
         return $this->showResultV2('Data Found', $result, 200);
     }
@@ -50,18 +51,16 @@ class TagController extends Controller
         $input["slug"]  = Str::slug($request->title);
         try {
             DB::beginTransaction();
+
             $tag    = $this->tagRepository->create($input);
-
             $result = $this->item($tag, new TagTransformer());
-            DB::commit();
 
+            DB::commit();
             return $this->showResultV2('Data Created', $result, 201);
         } catch (\Exception $exception) {
             DB::rollBack();
             return $this->realErrorResponse($exception);
         }
-
-
     }
 
     /**
@@ -77,10 +76,11 @@ class TagController extends Controller
 
         try {
             DB::beginTransaction();
+
             $tag        = $this->tagRepository->getTagByUuid($uuidTag);
             $updateTag  = $this->tagRepository->updateById($tag->id, $input);
+            $result     = $this->item($updateTag, new TagTransformer());
 
-            $result = $this->item($updateTag, new TagTransformer());
             DB::commit();
 
             return $this->showResultV2('Data updated', $result, 200);
@@ -108,6 +108,28 @@ class TagController extends Controller
             return $this->showResult('Data deleted', [], 200);
         } catch (\Exception $exception) {
             DB::rollBack();
+            return $this->realErrorResponse($exception);
+        }
+    }
+
+    /**
+     * @param $slug
+     *
+     * @return JsonResponse
+     */
+    public function showTagBySlug($slug): JsonResponse
+    {
+        try {
+            $news = $this->tagRepository->getTagBySlug($slug);
+
+            if (! $news) {
+                return $this->errorResponse("Data tidak ditemukan", 403);
+            }
+
+            $result = $this->item($news, new TagTransformer(), 'topic,tags');
+
+            return $this->showResultV2('Data Found', $result, 200);
+        } catch (\Exception $exception) {
             return $this->realErrorResponse($exception);
         }
     }

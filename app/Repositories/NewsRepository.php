@@ -54,7 +54,8 @@ class NewsRepository extends BaseRepository
                 "slug"          => $data["slug"],
                 "title"         => $data["title"],
                 "topic_id"      => $data["topic_id"],
-                "description"   => $data["description"]
+                "description"   => $data["description"],
+                "status"        => 1,
             ]
         );
     }
@@ -67,7 +68,6 @@ class NewsRepository extends BaseRepository
             "slug"          => $data["slug"],
             "topic_id"      => $data["topic_id"],
             "description"   => $data["description"]
-
         ]);
 
         return $news;
@@ -178,6 +178,8 @@ class NewsRepository extends BaseRepository
      */
     public function deleteNews(News $news): ?bool
     {
+        $news->status = 3;
+        $news->save();
         return $news->delete();
     }
 
@@ -240,6 +242,32 @@ class NewsRepository extends BaseRepository
     }
 
     /**
+     * @param $param
+     *
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @throws \Exception
+     */
+    public function getData($param=[])
+    {
+        $key = implode("_" ,$param);
+
+        $getCache = getCache($key);
+        if (! $getCache) {
+            $filtering = $this->filter($param);
+            $data = $filtering->get();
+            setCache($key, $data);
+        } else {
+            $data = $this->getFromCache($key);
+        }
+        return $data;
+    }
+
+    public function getFromCache(string $key)
+    {
+        return $this->model::hydrate(json_decode(getCache($key), false));
+    }
+
+    /**
      * @param $uuidNews
      *
      * @return mixed
@@ -266,7 +294,21 @@ class NewsRepository extends BaseRepository
      */
     public function getNewsBySlug(string $newsSlug)
     {
-        return $this->model->where("slug", "LIKE", "%" . $newsSlug ."%")
-            ->first();
+        $getCache = getCache($newsSlug);
+        if (! $getCache) {
+            $data = $this->model->where("slug", "LIKE", "%" . $newsSlug ."%")
+                ->first();
+            setCache($newsSlug, $data);
+
+        } else {
+            $temp=[];
+            $test= json_decode($getCache, false);
+            foreach ($test as $key => $value) {
+                $temp[0][$key] = $value;
+            }
+            $data = $this->model::hydrate($temp);
+            $data = $data[0];
+        }
+        return $data;
     }
 }

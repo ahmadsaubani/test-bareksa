@@ -42,7 +42,39 @@ class TopicRepository extends BaseRepository
      */
     public function getTopicBySlug(string $topicSlug)
     {
-        return $this->model->where("slug", "LIKE", "%" . $topicSlug ."%")
-            ->first();
+        $getCache = getCache($topicSlug);
+        if (! $getCache) {
+            $data = $this->model->where("slug", "LIKE", "%" . $topicSlug ."%")
+                ->first();
+            setCache($topicSlug, $data);
+        } else {
+            $temp=[];
+            $test= json_decode($getCache, false);
+            foreach ($test as $key => $value) {
+                $temp[0][$key] = $value;
+            }
+            $data = $this->model::hydrate($temp);
+            $data = $data[0];
+        }
+        return $data;
+    }
+
+    public function getData()
+    {
+        $key = "getAllTopic";
+        $getCache = getCache($key);
+
+        if (! $getCache) {
+            $data = $this->model::get();
+            setCache($key, $data);
+        } else {
+            $data = $this->getFromCache($key);
+        }
+        return $data;
+    }
+
+    public function getFromCache(string $key)
+    {
+        return $this->model::hydrate(json_decode(getCache($key), false));
     }
 }

@@ -1,0 +1,469 @@
+{
+	"info": {
+		"_postman_id": "e02cc0d4-dc92-4dca-9551-caf86680d3f8",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tags",
+			"item": [
+				{
+					"name": "Populate All Tags",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZWVkYjNhZDc4MjA0NDA4YzZkNjJlMWE4MTU2OTVlN2YzZjE2YjY4ZjExYzRkYWZjZjkwNWIzMTMxZjlkYjYxNjNjOWZkZDUwZGUzZWI0YTciLCJpYXQiOjE2NDExOTAxNjAuNjAwMjA2LCJuYmYiOjE2NDExOTAxNjAuNjAwMjA3LCJleHAiOjE3MDExOTAxMDAuNDI0Nzk3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.RAJdd3infMRJiOkcb6L7y01WixcrvODNyRpzWwz7BFXOGsRnrYo_3p-GZMYHVT6PhJbKdj26cy_KCawJVu6UV3XfuY9WKBnfQ24g8I-PKsggis3GcyvV8rNg09_CgGh49Zq6Qk5mx7Eb10Pr3vHDjEcMSpofRmH5xmRUCQrNVm4lLe_P6hMY8uOpetLKHvcTn9rls8U63TfaoHKgehq4h3i052_rmjhjK0NHArB4jQCAAKn5j261rfTXAcbi5knswxclf2N5PVsvlig0ZBeZez36seZO-6XXalC3p-22IrgqZGD6qAz1e0ryAoyg3a1qq0IvDIHLMKaKamPSgn9LQOayTi4iChEBfy0LtgGV_6rkhuiuNwxmM1GcpMwK0pmlXL3qR-EccO4sgy8AmKBqWHTf0xJH4but1Q65Jh0pBlRLatOysO09OHNeXyeM7HEd5VluD7rgajhZCBjPizhu6vMRzq3GorZPtfe91jKNqK2vwt2FnaZ15qteSahmZ-g8JbAozVgVmdwI5M75bimzfRpEQgvYTYbLIFz34ro1Fx-SQKkd1cvPXxyqMMfa19TFXrkn1kN5Q-6NporWevnxV_8dDKY4cn2mKoJQ4UDa_QFjZ4Y9G67uasBLkGTuARe97A9oXA19llqFD9nIjMC8iXpXudulUt8rmgtXsv7z4-Y",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/tags/populate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tags",
+								"populate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Tag",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "sama aja lah",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/tags/create",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tags",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Tag With UUID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "ini hanya permulaan",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/tags/update/03817263-d50e-4faf-a272-9eba5c8632c6",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tags",
+								"update",
+								"03817263-d50e-4faf-a272-9eba5c8632c6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Tag By UUID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/tags/delete/03817263-d50e-4faf-a272-9eba5c8632c6",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tags",
+								"delete",
+								"03817263-d50e-4faf-a272-9eba5c8632c6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Tag By Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/tags/detail/belajar",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tags",
+								"detail",
+								"belajar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Topic",
+			"item": [
+				{
+					"name": "Populate All Topics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/topic/populate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topic",
+								"populate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Topic",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "prekitiew sule",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/topic/create",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topic",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Topic by UUID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "apaan sih ini",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/topic/update/5cc21dee-45db-4067-b86b-8b1d293b7c4b",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topic",
+								"update",
+								"5cc21dee-45db-4067-b86b-8b1d293b7c4b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Topic By UUID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/topic/delete/e97d9893-b629-44db-808a-7448e2ae32ff",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topic",
+								"delete",
+								"e97d9893-b629-44db-808a-7448e2ae32ff"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Topic by Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/topic/detail/investasi",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topic",
+								"detail",
+								"investasi"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "News",
+			"item": [
+				{
+					"name": "Create News",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "berita 3",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "lorem ipsum dolor sit amet",
+									"type": "text"
+								},
+								{
+									"key": "tag_id",
+									"value": "4852300d-01f0-4dc1-aa1a-2c75596e2e13, 8ddf1944-4ca8-43e5-8cda-a79852a3e402",
+									"description": "multiple uuid tag, separate by comma",
+									"type": "text"
+								},
+								{
+									"key": "topic_id",
+									"value": "4f225a8e-dae9-4d58-87bf-3c4a5e76edfb",
+									"description": "uuid topic",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/news/create",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"news",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update News By UUID NEWS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "latest test",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "lorem ipsum dolor sit amet",
+									"type": "text"
+								},
+								{
+									"key": "tag_id",
+									"value": "8ddf1944-4ca8-43e5-8cda-a79852a3e402, 6c3391fe-cbea-495c-a817-012431591be2",
+									"type": "text"
+								},
+								{
+									"key": "topic_id",
+									"value": "5cc21dee-45db-4067-b86b-8b1d293b7c4b",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/news/update/c50ab37e-5db3-4a61-bce9-492ff6e5c32e",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"news",
+								"update",
+								"c50ab37e-5db3-4a61-bce9-492ff6e5c32e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Populate All News ",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/news/populate?status=deleted&topic=topic-2&tag=5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"news",
+								"populate"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "deleted",
+									"description": "draft, publish, deleted"
+								},
+								{
+									"key": "topic",
+									"value": "topic-2",
+									"description": "optional, Ref to topic slug"
+								},
+								{
+									"key": "tag",
+									"value": "5",
+									"description": "optional, Ref to tag slug"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete News By UUID NEWS",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/news/delete/9d8a85b6-cd25-4f7f-bca1-e607b277ff78",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"news",
+								"delete",
+								"9d8a85b6-cd25-4f7f-bca1-e607b277ff78"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publish News By UUID NEWS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/news/publish/60e4013b-e86c-4106-b7ea-f83bec663346",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"news",
+								"publish",
+								"60e4013b-e86c-4106-b7ea-f83bec663346"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get News By Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/news/detail/2022-siap-pensiun-muda-dengan-rp5-miliar",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"news",
+								"detail",
+								"2022-siap-pensiun-muda-dengan-rp5-miliar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

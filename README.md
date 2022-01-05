@@ -3,6 +3,7 @@
 ## Requirements
 - installed PHP ^7.2.5|^8.0 (tested on php7.4)
 - Database (tested on mysql database)
+- Installed Redis on local machine
 - Dependencies and PHP extension needed by laravel
 
 ## How to install

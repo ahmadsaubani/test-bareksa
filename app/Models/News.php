@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property mixed $title
  * @property mixed $slug
  * @property mixed $description
+ * @property mixed $status
  *
  * @method static updateOrCreate(array $array, array $array1)
  */
